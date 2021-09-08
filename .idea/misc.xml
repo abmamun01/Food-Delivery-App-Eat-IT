@@ -5,17 +5,32 @@
       <map>
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/drawable/bottom_bg.xml" value="0.2935185185185185" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/drawable/header_bg.xml" value="0.2935185185185185" />
-        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_home.xml" value="0.2861111111111111" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_login.xml" value="0.35260416666666666" />
-        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_sign_up.xml" value="0.22" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/app_bar_home.xml" value="0.2861111111111111" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/cart_item.xml" value="0.22" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/content_home.xml" value="0.21458333333333332" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/fragment_cart.xml" value="0.14375" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/fragment_food_details.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/fragment_food_list.xml" value="0.21458333333333332" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/fragment_home.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/fragment_menu.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_addon_display.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_best_deals.xml" value="0.275" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_category_item.xml" value="0.22" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_chip_with_delete_icon.xml" value="0.275" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_commment.xml" value="0.1" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_food_item.xml" value="0.2" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_place_order.xml" value="0.15546875" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_popular_categories.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_rating.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/layout_register.xml" value="0.275" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/login_form.xml" value="0.36666666666666664" />
-        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/signupfrom.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/nav_header_home.xml" value="0.275" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/signupfrom.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/menu/activity_main_drawer.xml" value="0.25" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/menu/cart_menu.xml" value="0.1" />
         <entry key="..\:/Food_Delevery/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.24259259259259258" />
         <entry key="..\:/Food_Delevery/app/src/main/res/layout/activity_home.xml" value="0.21666666666666667" />
         <entry key="..\:/Food_Delevery/app/src/main/res/layout/activity_main.xml" value="0.16" />

@@ -156,97 +156,94 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
             cartItem.setFoodSize("Default");
 
         }
-            cartDataSources.getItemWithAllOptionsInCart(Common.currentUser.getUid(),
-                    cartItem.getFoodId(),
-                    cartItem.getFoodSize(),
-                    cartItem.getFoodAddon())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<CartItem>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
+        cartDataSources.getItemWithAllOptionsInCart(Common.currentUser.getUid(),
+                cartItem.getFoodId(),
+                cartItem.getFoodSize(),
+                cartItem.getFoodAddon())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<CartItem>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onSuccess(@NonNull CartItem cartItemFromDB) {
+                    @Override
+                    public void onSuccess(@NonNull CartItem cartItemFromDB) {
 
-                            if (cartItemFromDB.equals(cartItem)) {
-                                //ALREADY IN DATABASE , JUST UPDATE
-                                cartItemFromDB.setFoodExtraPrice(cartItem.getFoodExtraPrice());
-                                cartItemFromDB.setFoodAddon(cartItem.getFoodAddon());
-                                cartItemFromDB.setFoodSize(cartItem.getFoodSize());
-                                cartItemFromDB.setFoodQuantitiy(cartItemFromDB.getFoodQuantitiy() + cartItemFromDB.getFoodQuantitiy());
+                        if (cartItemFromDB.equals(cartItem)) {
+                            //ALREADY IN DATABASE , JUST UPDATE
+                            cartItemFromDB.setFoodExtraPrice(cartItem.getFoodExtraPrice());
+                            cartItemFromDB.setFoodAddon(cartItem.getFoodAddon());
+                            cartItemFromDB.setFoodSize(cartItem.getFoodSize());
+                            cartItemFromDB.setFoodQuantitiy(cartItemFromDB.getFoodQuantitiy() + cartItemFromDB.getFoodQuantitiy());
 
-                                cartDataSources.updateCartItems(cartItemFromDB)
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(new SingleObserver<Integer>() {
-                                            @Override
-                                            public void onSubscribe(@NonNull Disposable d) {
+                            cartDataSources.updateCartItems(cartItemFromDB)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new SingleObserver<Integer>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
 
-                                            }
+                                        }
 
-                                            @Override
-                                            public void onSuccess(@NonNull Integer integer) {
-                                                Toast.makeText(context, "Update Cart Successful!", Toast.LENGTH_SHORT).show();
+                                        @Override
+                                        public void onSuccess(@NonNull Integer integer) {
+                                            Toast.makeText(context, "Update Cart Successful!", Toast.LENGTH_SHORT).show();
+                                            EventBus.getDefault().postSticky(new CounterCartEvent(true));
+
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+
+                                            Toast.makeText(context, "[UPDATE CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+                        } else {
+                            //Item not available in cart before,inser new
+                            compositeDisposable.add(cartDataSources.insertOrReplaceAll(cartItem).subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(() -> {
+                                                Toast.makeText(context, "Add to Cart Success!", Toast.LENGTH_SHORT).show();
                                                 EventBus.getDefault().postSticky(new CounterCartEvent(true));
 
+                                            }, throwable -> {
+                                                Toast.makeText(context, "[CART ERROR]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
 
-                                            @Override
-                                            public void onError(@NonNull Throwable e) {
+                                    ));
+                        }
 
-                                                Toast.makeText(context, "[UPDATE CART]" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                        if (e.getMessage().contains("empty")) {
+
+                            //Default,if cart is empty, this code will be fired
+                            compositeDisposable.add(cartDataSources.insertOrReplaceAll(cartItem).subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(() -> {
+                                                Toast.makeText(context, "Add to Cart Success!", Toast.LENGTH_SHORT).show();
+
+                                                EventBus.getDefault().postSticky(new CounterCartEvent(true));
+
+                                            }, throwable -> {
+                                                Toast.makeText(context, "[CART ERROR]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
-                                        });
 
+                                    ));
 
-                            } else {
-                                //Item not available in cart before,inser new
-                                compositeDisposable.add(cartDataSources.insertOrReplaceAll(cartItem).subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(() -> {
-                                                    Toast.makeText(context, "Add to Cart Success!", Toast.LENGTH_SHORT).show();
-                                                    EventBus.getDefault().postSticky(new CounterCartEvent(true));
-
-                                                }, throwable -> {
-                                                    Toast.makeText(context, "[CART ERROR]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-
-                                        ));
-                            }
+                        } else {
 
                         }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                            if (e.getMessage().contains("empty")) {
-
-                                //Default,if cart is empty, this code will be fired
-                                compositeDisposable.add(cartDataSources.insertOrReplaceAll(cartItem).subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(() -> {
-                                                    Toast.makeText(context, "Add to Cart Success!", Toast.LENGTH_SHORT).show();
-
-                                                    EventBus.getDefault().postSticky(new CounterCartEvent(true));
-
-                                                }, throwable -> {
-                                                    Toast.makeText(context, "[CART ERROR]" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-
-                                        ));
-
-                            } else {
-
-                            }
-                            Toast.makeText(context, "GET CART" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-
+                        Toast.makeText(context, "GET CART" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
     }
@@ -401,7 +398,7 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
                 chipGroup_user_selected_addon.addView(chip);
 
             }
-        } else if (Common.selectedFood.getUserSelectedAddon().size() == 0) {
+        } else  {
             chipGroup_user_selected_addon.removeAllViews();
         }
 
@@ -455,15 +452,14 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
 
                             double sumRating = foodModel.getRatingValue() + ratingValue;
                             long ratingCount = foodModel.getRatingCount() + 1;
-                            double result = sumRating / ratingCount;
 
 
                             Map<String, Object> updateData = new HashMap<>();
-                            updateData.put("ratingValue", result);
+                            updateData.put("ratingValue", sumRating);
                             updateData.put("ratingCount", ratingCount);
                             //Update data in variable
 
-                            foodModel.setRatingValue(result);
+                            foodModel.setRatingValue(sumRating);
                             foodModel.setRatingCount(ratingCount);
 
                             snapshot.getRef()
@@ -505,7 +501,7 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
 
 
         if (foodModel.getRatingValue() != null) {
-            ratingBar.setRating(foodModel.getRatingValue().floatValue());
+            ratingBar.setRating(foodModel.getRatingValue().floatValue() / foodModel.getRatingCount());
         }
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Common.selectedFood.getName());
@@ -549,14 +545,16 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
         }
         try {
             //Size
-            totalPrice += Double.parseDouble(Common.selectedFood.getUserSelectedSize().getPrice().toString());
+            if (Common.selectedFood.getUserSelectedSize() != null)
+                totalPrice += Double.parseDouble(Common.selectedFood.getUserSelectedSize().getPrice().toString());
+
             displayPrice = totalPrice * (Integer.parseInt(numberButton.getNumber()));
             displayPrice = Math.round(displayPrice * 100.0 / 100.0);
             food_price.setText(new StringBuilder("").append(Common.formatPrice(displayPrice)).toString());
 
 
-        }catch (Exception e){
-            Toast.makeText(context, "Total Price Null"+totalPrice, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(context, "Total Price Null" + totalPrice + "NullLL" + e, Toast.LENGTH_SHORT).show();
         }
 
         Log.d("EMPTYDD", "getUserSelectedSize: " + Common.selectedFood.getUserSelectedSize());

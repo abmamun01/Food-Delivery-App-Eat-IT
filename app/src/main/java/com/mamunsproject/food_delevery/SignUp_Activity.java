@@ -3,6 +3,7 @@ package com.mamunsproject.food_delevery;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.mamunsproject.food_delevery.Common.Common;
 import com.mamunsproject.food_delevery.Model.UserModel;
 
@@ -28,11 +35,11 @@ public class SignUp_Activity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
-    private EditText etEmail, etPassword, etName;
+    private EditText etEmail, etPassword, etName,etPhone,etAddress;
     private DatabaseReference userRef;
     FirebaseUser user;
     private Button signup_button;
-    String email, password;
+    String email, password,phone,address,name;
     FirebaseUser currentUser;
 
 
@@ -51,54 +58,39 @@ public class SignUp_Activity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword_signup);
         signup_button = findViewById(R.id.signupButton);
         etName = findViewById(R.id.et_name_signup);
+        etPhone=findViewById(R.id.edit_phone_Number);
+        etAddress=findViewById(R.id.edit_address);
 
 
-        email = etEmail.getText().toString();
-        password = etPassword.getText().toString();
 
 
-    }
-
-    private void gotoHomeActivity(UserModel userModel) {
-        //--------========-------------- For Register --------========--------------
-
-        Common.currentUser = userModel;// Importan,you need always assign value for it!
-        Log.d("KDJDDDD", "gotoHomeActivity: ");
-        //--------========-------------- For Register --------========--------------
 
 
-        startActivity(new Intent(SignUp_Activity.this, HomeActivity.class));
-        finish();
-    }
+        signup_button.setOnClickListener(view ->
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-
-
-        signup_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
+        mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("TAGSSS", "createUserWithEmail:success");
+
                                     FirebaseUser user = mAuth.getCurrentUser();
+
+                                    email = etEmail.getText().toString();
+                                    password = etPassword.getText().toString();
+                                    phone=etPhone.getText().toString();
+                                    address=etAddress.getText().toString();
+                                    name=etName.getText().toString();
+
 
                                     UserModel userModel = new UserModel();
 
-
                                     userModel.setUid(user.getUid());
-                                    userModel.setName(etName.getText().toString());
-                                    userModel.setAddress(etEmail.getText().toString());
-                                    userModel.setPhone("04404");
+                                    userModel.setName(name);
+                                    userModel.setAddress(address);
+                                    userModel.setPhone(phone);
 
 
                                     userRef.child(user.getUid()).setValue(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -122,23 +114,77 @@ public class SignUp_Activity extends AppCompatActivity {
 
                                 }
                             }
-                        });
-
-            }
-        });
+                        }));
 
 
-        if (user != null) {
-            UserModel userModel = new UserModel();
-            userModel.setUid(user.getUid());
-            userModel.setName(etName.getText().toString());
-            userModel.setAddress(etEmail.getText().toString());
-            userModel.setPhone("04404");
+    }
+
+    private void gotoHomeActivity(UserModel userModel) {
+        //--------========-------------- For Register --------========--------------
+
+        Common.currentUser = userModel;// Importan,you need always assign value for it!
+        Log.d("KDJDDDD", "gotoHomeActivity: ");
+        //--------========-------------- For Register --------========--------------
 
 
-            gotoHomeActivity(userModel);
-        }
+        startActivity(new Intent(SignUp_Activity.this, HomeActivity.class));
+        finish();
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+
+                            if (user != null) {
+
+                                userRef.child(user.getUid())
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                if (snapshot.exists()) {
+
+                                                    Toast.makeText(SignUp_Activity.this, "You Already Registered!", Toast.LENGTH_SHORT).show();
+                                                    UserModel userModel = snapshot.getValue(UserModel.class);
+                                                    gotoHomeActivity(userModel);
+
+                                                } else {
+
+                                                    //  showRegisterDialog(user);
+                                                }
+                                                // dialog.hide();
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                //  dialog.hide();
+                                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+  
+                        }
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                            Toast.makeText(SignUp_Activity.this, "You must Permission to use app", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                        }
+                    }).check();
+
+
+    }
 }

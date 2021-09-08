@@ -89,7 +89,13 @@ dependencies {
 
 
     //Counter Fab
-    //implementation 'com.github.aandremion:counterfab:1.2.2-alpha1'
+    implementation 'com.github.andremion:counterfab:1.2.0'
+
+    //For Permission Library
+    implementation 'com.karumi:dexter:5.0.0'
+
+    //For Location
+    implementation "com.google.android.gms:play-services-location:18.0.0"
 }
 
 

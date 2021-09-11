@@ -18,10 +18,13 @@ import android.view.animation.LayoutAnimationController;
 
 import com.mamunsproject.food_delevery.Adapter.MyFoodListAdapter;
 import com.mamunsproject.food_delevery.Common.Common;
+import com.mamunsproject.food_delevery.EventBus.MenuItemBack;
 import com.mamunsproject.food_delevery.MainActivity;
 import com.mamunsproject.food_delevery.Model.FoodModel;
 import com.mamunsproject.food_delevery.R;
 import com.mamunsproject.food_delevery.ui.home.HomeViewModel;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -68,5 +71,13 @@ public class FoodListFragment extends Fragment {
         recyclerFoodList.setHasFixedSize(true);
         recyclerFoodList.setLayoutManager(new LinearLayoutManager(getContext()));
         layoutAnimationController= AnimationUtils.loadLayoutAnimation(getContext(),R.anim.layout_item_from_left);
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        EventBus.getDefault().postSticky(new MenuItemBack());
+        super.onDestroy();
     }
 }

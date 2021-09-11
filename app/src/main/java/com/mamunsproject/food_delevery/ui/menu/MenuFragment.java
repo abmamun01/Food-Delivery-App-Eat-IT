@@ -22,8 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mamunsproject.food_delevery.Adapter.MyCategoryAdapter;
 import com.mamunsproject.food_delevery.Common.Common;
 import com.mamunsproject.food_delevery.Common.SpaceItemDecoration;
+import com.mamunsproject.food_delevery.EventBus.MenuItemBack;
 import com.mamunsproject.food_delevery.R;
 import com.mamunsproject.food_delevery.databinding.FragmentMenuBinding;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,5 +102,12 @@ public class MenuFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        EventBus.getDefault().postSticky(new MenuItemBack());
+        super.onDestroy();
     }
 }

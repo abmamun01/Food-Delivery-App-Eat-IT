@@ -51,6 +51,7 @@ import com.mamunsproject.food_delevery.Database.CartDatabase;
 import com.mamunsproject.food_delevery.Database.CartItem;
 import com.mamunsproject.food_delevery.Database.LocalCartDataSource;
 import com.mamunsproject.food_delevery.EventBus.CounterCartEvent;
+import com.mamunsproject.food_delevery.EventBus.MenuItemBack;
 import com.mamunsproject.food_delevery.EventBus.UpdateItemInCart;
 import com.mamunsproject.food_delevery.Model.Order;
 import com.mamunsproject.food_delevery.R;
@@ -644,5 +645,13 @@ public class CartFragment extends Fragment {
 
                     }
                 });
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        EventBus.getDefault().postSticky(new MenuItemBack());
+        super.onDestroy();
     }
 }

@@ -27,6 +27,15 @@
 
     </group>
 
+    <group android:id="@+id/view_order_group">
+
+        <item
+            android:id="@+id/nav_view_orders"
+            android:icon="@drawable/ic_baseline_view_headline_24"
+            android:title="@string/menu_view_order"/>
+
+    </group>
+
         <group>
 
         <item
@@ -35,6 +44,5 @@
             android:title="@string/exit"/>
 
     </group>
-
 
 </menu>

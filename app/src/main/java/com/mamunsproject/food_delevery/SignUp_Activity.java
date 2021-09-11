@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -35,11 +37,11 @@ public class SignUp_Activity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
-    private EditText etEmail, etPassword, etName,etPhone,etAddress;
+    private EditText etEmail, etPassword, etName, etPhone, etAddress;
     private DatabaseReference userRef;
     FirebaseUser user;
     private Button signup_button;
-    String email, password,phone,address,name;
+    String email, password, phone, address, name;
     FirebaseUser currentUser;
 
 
@@ -58,17 +60,13 @@ public class SignUp_Activity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword_signup);
         signup_button = findViewById(R.id.signupButton);
         etName = findViewById(R.id.et_name_signup);
-        etPhone=findViewById(R.id.edit_phone_Number);
-        etAddress=findViewById(R.id.edit_address);
-
-
-
-
+        etPhone = findViewById(R.id.edit_phone_Number);
+        etAddress = findViewById(R.id.edit_address);
 
 
         signup_button.setOnClickListener(view ->
 
-        mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
+                mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -80,9 +78,9 @@ public class SignUp_Activity extends AppCompatActivity {
 
                                     email = etEmail.getText().toString();
                                     password = etPassword.getText().toString();
-                                    phone=etPhone.getText().toString();
-                                    address=etAddress.getText().toString();
-                                    name=etName.getText().toString();
+                                    phone = etPhone.getText().toString();
+                                    address = etAddress.getText().toString();
+                                    name = etName.getText().toString();
 
 
                                     UserModel userModel = new UserModel();
@@ -99,7 +97,7 @@ public class SignUp_Activity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(getApplicationContext(), "Congratulation! Succes", Toast.LENGTH_SHORT).show();
 
-                                                gotoHomeActivity(userModel);
+                                                gotoHomeActivity(userModel,Common.currentToken);
                                             }
                                         }
                                     });
@@ -118,18 +116,47 @@ public class SignUp_Activity extends AppCompatActivity {
 
 
     }
-
-    private void gotoHomeActivity(UserModel userModel) {
+/*    private void gotoHomeActivity(UserModel userModel) {
         //--------========-------------- For Register --------========--------------
+
 
         Common.currentUser = userModel;// Importan,you need always assign value for it!
-        Log.d("KDJDDDD", "gotoHomeActivity: ");
-        //--------========-------------- For Register --------========--------------
-
-
         startActivity(new Intent(SignUp_Activity.this, HomeActivity.class));
         finish();
+
+            }*/
+
+
+
+
+    private void gotoHomeActivity(UserModel userModel, String token) {
+        //--------========-------------- For Register --------========--------------
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+
+                Common.currentToken = token;
+                Common.currentUser = userModel;// Importan,you need always assign value for it!
+                startActivity(new Intent(SignUp_Activity.this, HomeActivity.class));
+                Common.updateToken(SignUp_Activity.this,task.getResult());
+                finish();
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Common.currentToken = token;
+                Common.currentUser = userModel;// Importan,you need always assign value for it!
+                startActivity(new Intent(SignUp_Activity.this, HomeActivity.class));
+                finish();
+                Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
+
 
 
     @Override
@@ -137,53 +164,53 @@ public class SignUp_Activity extends AppCompatActivity {
         super.onStart();
 
 
-            Dexter.withActivity(this)
-                    .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .withListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
 
-                            if (user != null) {
+                        if (user != null) {
 
-                                userRef.child(user.getUid())
-                                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            userRef.child(user.getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                                if (snapshot.exists()) {
+                                            if (snapshot.exists()) {
 
-                                                    Toast.makeText(SignUp_Activity.this, "You Already Registered!", Toast.LENGTH_SHORT).show();
-                                                    UserModel userModel = snapshot.getValue(UserModel.class);
-                                                    gotoHomeActivity(userModel);
+                                                Toast.makeText(SignUp_Activity.this, "You Already Registered!", Toast.LENGTH_SHORT).show();
+                                                UserModel userModel = snapshot.getValue(UserModel.class);
+                                                gotoHomeActivity(userModel,Common.currentToken);
 
-                                                } else {
+                                            } else {
 
-                                                    //  showRegisterDialog(user);
-                                                }
-                                                // dialog.hide();
+                                                //  showRegisterDialog(user);
                                             }
+                                            // dialog.hide();
+                                        }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-                                                //  dialog.hide();
-                                                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            }
-  
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            //  dialog.hide();
+                                            Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
 
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                    }
 
-                            Toast.makeText(SignUp_Activity.this, "You must Permission to use app", Toast.LENGTH_SHORT).show();
-                        }
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        Toast.makeText(SignUp_Activity.this, "You must Permission to use app", Toast.LENGTH_SHORT).show();
+                    }
 
-                        }
-                    }).check();
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }).check();
 
 
     }

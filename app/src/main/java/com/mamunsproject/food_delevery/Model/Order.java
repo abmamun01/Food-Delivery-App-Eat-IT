@@ -10,12 +10,16 @@ public class Order {
     private boolean cod;
     private int discount;
     private List<CartItem> cartItemList;
+    private long createDate;
+    private String orderNumber;
+    private int orderStatus;
+
 
     public Order() {
     }
 
 
-    public Order(String userId, String userName, String userPhone, String shippingAddress, String comment, String transactionId, double lat, double lng, double totalPayment, double finalPayment, boolean cod, int discount, List<CartItem> cartItemList) {
+    public Order(String userId, String userName, String userPhone, String shippingAddress, String comment, String transactionId, double lat, double lng, double totalPayment, double finalPayment, boolean cod, int discount, List<CartItem> cartItemList ,long createDate) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
@@ -29,8 +33,17 @@ public class Order {
         this.cod = cod;
         this.discount = discount;
         this.cartItemList = cartItemList;
+        this.createDate = createDate;
     }
 
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
 
     public String getUserId() {
         return userId;
@@ -134,5 +147,21 @@ public class Order {
 
     public void setCartItemList(List<CartItem> cartItemList) {
         this.cartItemList = cartItemList;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

@@ -12,6 +12,7 @@
     <string name="menu_menu">Categories</string>
     <string name="menu_food_details">Food Details</string>
     <string name="menu_cart">Cart</string>
+    <string name="menu_view_order">View Orders</string>
     <string name="exit">Sign Out</string>
     <string name="clear_cart">Clear Cart</string>
     <string name="menu_foodList">Food List</string>

@@ -49,6 +49,7 @@ import com.mamunsproject.food_delevery.Database.CartDatabase;
 import com.mamunsproject.food_delevery.Database.CartItem;
 import com.mamunsproject.food_delevery.Database.LocalCartDataSource;
 import com.mamunsproject.food_delevery.EventBus.CounterCartEvent;
+import com.mamunsproject.food_delevery.EventBus.MenuItemBack;
 import com.mamunsproject.food_delevery.Model.AddonModel;
 import com.mamunsproject.food_delevery.Model.Comment_Model;
 import com.mamunsproject.food_delevery.Model.FoodModel;
@@ -609,8 +610,14 @@ public class FoodDetails_Fragment extends Fragment implements TextWatcher {
 
     @Override
     public void onStop() {
-
-        //   compositeDisposable.clear();
+        compositeDisposable.clear();
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+
+        EventBus.getDefault().postSticky(new MenuItemBack());
+        super.onDestroy();
     }
 }

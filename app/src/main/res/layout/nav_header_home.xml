@@ -26,6 +26,8 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:fontFamily="@font/roboto_medium"
+        android:textStyle="bold"
+
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

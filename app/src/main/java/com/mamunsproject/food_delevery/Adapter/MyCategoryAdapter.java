@@ -19,6 +19,7 @@ import com.mamunsproject.food_delevery.R;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,6 +62,11 @@ public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.My
     @Override
     public int getItemCount() {
         return categoryModelList.size();
+    }
+
+    public List<CategoryModel> getListCategory() {
+
+        return categoryModelList;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

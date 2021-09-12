@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/drawable/bottom_bg.xml" value="0.2935185185185185" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/drawable/header_bg.xml" value="0.2935185185185185" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/drawable/side_nav_bar.xml" value="0.287109375" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_login.xml" value="0.35260416666666666" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/activity_sign_up.xml" value="0.22" />
@@ -33,6 +34,7 @@
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/layout/signupfrom.xml" value="0.25" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/menu/activity_main_drawer.xml" value="0.25" />
         <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/menu/cart_menu.xml" value="0.1" />
+        <entry key="..\:/Android Studio Projectss/Food_Delevery/app/src/main/res/menu/search_menu.xml" value="0.1" />
         <entry key="..\:/Food_Delevery/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.24259259259259258" />
         <entry key="..\:/Food_Delevery/app/src/main/res/layout/activity_home.xml" value="0.21666666666666667" />
         <entry key="..\:/Food_Delevery/app/src/main/res/layout/activity_main.xml" value="0.16" />
